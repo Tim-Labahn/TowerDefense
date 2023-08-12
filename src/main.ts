@@ -82,87 +82,79 @@ function generateEnemyStart() {
   gameMap[gameSize - 1][Math.floor(gameSize / 2)].enemyStart = true;
 }
 function generateEnemyPath() {
-  const startX = gameSize - 1;
-  const startY = Math.floor(gameSize / 2);
-  let pathX = startX;
-  let pathY = startY;
+  let pathX = gameSize - 1;
+  let pathY = Math.floor(gameSize / 2);
   let connected = false;
-  //--------------------------------
   while (!connected) {
-    for (let i = 0; i < 15; i++) {
-      gameMap[pathX][pathY].enemyPathConnected = countPathConnected(pathX, pathY);
-      console.log('round', i);
-      const direction = Math.floor(Math.random() * 3) + 1;
-      if (direction === 1) {
-        if (gameMap[pathX - 1][pathY] && gameMap[pathX - 1][pathY].enemyPathConnected <= 1) {
-          //north
-          console.log('north');
-          gameMap[pathX - 1][pathY].enemyPath = true;
-          pathX = pathX - 1;
-        }
-      }
-      if (direction === 2 && gameMap[pathX][pathY + 1].enemyPathConnected <= 1) {
-        if (gameMap[pathX][pathY + 1]) {
-          //east
-          console.log('east');
-          gameMap[pathX][pathY + 1].enemyPath = true;
-          pathY = pathY + 1;
-        }
-      }
-      if (direction === 3 && gameMap[pathX][pathY - 1].enemyPathConnected <= 1) {
-        if (gameMap[pathX][pathY - 1]) {
-          //west
-          console.log('west');
-          gameMap[pathX][pathY - 1].enemyPath = true;
-          pathY = pathY - 1;
-        }
-      }
-      //------------------------------------------
-      //   if (gameMap[pathX + 1][pathY]) {
-      //     gameMap[pathX + 1][pathY].enemyPathConnected = countPathConnected(pathX + 1, pathY);
-      //   }
-      //   if (gameMap[pathX - 1][pathY]) {
-      //     gameMap[pathX - 1][pathY].enemyPathConnected = countPathConnected(pathX - 1, pathY);
-      //   }
-      //   if (gameMap[pathX][pathY + 1]) {
-      //     gameMap[pathX][pathY + 1].enemyPathConnected = countPathConnected(pathX, pathY + 1);
-      //   }
-      //   if (gameMap[pathX][pathY - 1]) {
-      //     gameMap[pathX][pathY - 1].enemyPathConnected = countPathConnected(pathX, pathY) - 1;
-      //   }
+    gameMap[pathX][pathY].enemyPathConnected = countPathConnected(pathX, pathY); // speichert die anzahl von feldern mit dem das momentane feld verbbunden ist
+    console.log(gameMap[pathX][pathY].enemyPathConnected);
+    const direction = Math.floor(Math.random() * 3) + 1;
+    if (direction === 1) {
+      pathX = pathX - 1;
+      gameMap[pathX][pathY].enemyPath = true;
     }
-    if (pathX === 0 && pathY === Math.floor(gameSize / 2)) {
+    //-----------------------
+    if (pathX === 0 && pathY === 5) {
       connected = true;
     }
   }
-}
+  //------------------------------
+  //     gameMap[pathX][pathY].enemyPathConnected = countPathConnected(pathX, pathY);
+  //     const direction = Math.floor(Math.random() * 3) + 1;
+  //     if (pathX - 1 < gameSize && pathX - 1 > 0) {
+  //       if (direction === 1) {
+  //         //north
+  //         console.log('north');
+  //         pathX = pathX - 1;
+  //         gameMap[pathX][pathY].enemyPath = true;
+  //       }
+  //     }
+  //     if (pathY + 1 < gameSize && pathY + 1 > 0) {
+  //       if (direction === 2) {
+  //         //east
+  //         console.log('east');
+  //         gameMap[pathX][pathY + 1].enemyPath = true;
+  //         pathY = pathY + 1;
+  //       }
+  //     }
+  //     if (pathY - 1 < gameSize && pathY - 1 > 0) {
+  //       if (direction === 3) {
+  //         //west
+  //         console.log('west');
+  //         gameMap[pathX][pathY - 1].enemyPath = true;
+  //         pathY = pathY - 1;
+  //       }
+  //     }
+  //   }
+  // }
 
-function countPathConnected(y: number, x: number) {
-  let numberOfConnectedPaths = 0;
-  if (gameMap[y + 1]?.[x]?.enemyPath) {
-    numberOfConnectedPaths++;
-  }
-  if (gameMap[y - 1]?.[x]?.enemyPath) {
-    numberOfConnectedPaths++;
-  }
-  if (gameMap[y]?.[x + 1]?.enemyPath) {
-    numberOfConnectedPaths++;
-  }
-  if (gameMap[y]?.[x - 1]?.enemyPath) {
-    numberOfConnectedPaths++;
-  }
-  if (gameMap[y + 1]?.[x + 1]?.enemyPath) {
-    numberOfConnectedPaths++;
-  }
-  if (gameMap[y - 1]?.[x + 1]?.enemyPath) {
-    numberOfConnectedPaths++;
-  }
-  if (gameMap[y - 1]?.[x - 1]?.enemyPath) {
-    numberOfConnectedPaths++;
-  }
-  if (gameMap[y + 1]?.[x - 1]?.enemyPath) {
-    numberOfConnectedPaths++;
-  }
+  function countPathConnected(y: number, x: number) {
+    let numberOfConnectedPaths = 0;
+    if (gameMap[y + 1]?.[x]?.enemyPath) {
+      numberOfConnectedPaths++;
+    }
+    if (gameMap[y - 1]?.[x]?.enemyPath) {
+      numberOfConnectedPaths++;
+    }
+    if (gameMap[y]?.[x + 1]?.enemyPath) {
+      numberOfConnectedPaths++;
+    }
+    if (gameMap[y]?.[x - 1]?.enemyPath) {
+      numberOfConnectedPaths++;
+    }
+    if (gameMap[y + 1]?.[x + 1]?.enemyPath) {
+      numberOfConnectedPaths++;
+    }
+    if (gameMap[y - 1]?.[x + 1]?.enemyPath) {
+      numberOfConnectedPaths++;
+    }
+    if (gameMap[y - 1]?.[x - 1]?.enemyPath) {
+      numberOfConnectedPaths++;
+    }
+    if (gameMap[y + 1]?.[x - 1]?.enemyPath) {
+      numberOfConnectedPaths++;
+    }
 
-  return numberOfConnectedPaths;
+    return numberOfConnectedPaths;
+  }
 }
