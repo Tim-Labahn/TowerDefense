@@ -1,21 +1,21 @@
 {
   "compilerOptions": {
-    "composite": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ESNext",
+    "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
-    "strict": true,
-    "jsx": "preserve",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "esModuleInterop": true,
-    "lib": ["ESNext", "DOM"],
-    "skipLibCheck": true,
     "noEmit": true,
-    "allowJs": true,
-    "checkJs": true,
+
+    /* Linting */
+    "strict": true,
+
     // Strict Checks
     "alwaysStrict": true,
     "noImplicitAny": true,
@@ -46,5 +46,5 @@
     "suppressImplicitAnyIndexErrors": false,
     "noStrictGenericChecks": false
   },
-  "include": ["**/*.js", "**/*.ts", "**/*.d.ts", "**/*.tsx", "**/*.vue", "vocabularyList.js"]
+  "include": ["src"]
 }
