@@ -38,8 +38,8 @@ function generateField() {
 
 function gamePlay() {
   generatePlayerStart();
-  generateEnemyPath();
   generateEnemyStart();
+  generateEnemyPath();
   render();
 }
 
@@ -58,7 +58,8 @@ function render() {
       }
       if (gameMap[x][y].enemyPath) {
         tile.setAttribute('isEnemyPath', 'EnemyPath');
-        tile.innerHTML = '';
+        tile.innerHTML = '👾';
+        console.log('enemy path created');
       }
       if (gameMap[x][y].playerBase) {
         tile.setAttribute('isPlayerBase', 'PlayerBase');
@@ -81,10 +82,39 @@ function generateEnemyStart() {
   gameMap[gameSize - 1][Math.floor(gameSize / 2)].enemyStart = true;
 }
 function generateEnemyPath() {
-  //   const startX = gameSize - 1;
-  //   const startY = Math.floor(gameSize / 2);
+  const startX = gameSize - 1;
+  const startY = Math.floor(gameSize / 2);
+  let pathX = startX;
+  let pathY = startY;
   let connected = false;
   while (!connected) {
+    for (let x = 0; x < 15; x++) {
+      const direction = Math.floor(Math.random() * 3) + 1;
+      if (direction === 1) {
+        if (gameMap[pathX - 1][pathY]) {
+          //north
+          console.log('north');
+          gameMap[pathX - 1][pathY].enemyPath = true;
+          pathX = pathX - 1;
+        }
+      }
+      if (direction === 2) {
+        if (gameMap[pathX][pathY + 1]) {
+          //east
+          console.log('east');
+          gameMap[pathX][pathY + 1].enemyPath = true;
+          pathY = pathY + 1;
+        }
+      }
+      if (direction === 3) {
+        if (gameMap[pathX][pathY - 1]) {
+          //west
+          console.log('west');
+          gameMap[pathX][pathY - 1].enemyPath = true;
+          pathY = pathY - 1;
+        }
+      }
+    }
     connected = true;
   }
 }
