@@ -11,6 +11,7 @@ type GameMap = {
 const gameMap: GameMap = [];
 const gameSize = 11;
 type gameSize = number;
+let money = 100;
 //----------------------------------------
 generateField();
 gamePlay();
@@ -53,10 +54,9 @@ function render() {
     for (let y = 0; y < gameSize; y++) {
       const tile = document.createElement('div');
       tile.className = 'tile';
-      if (gameMap[x][y].isPlayerTower) {
-        tile.setAttribute('isPlayerTower', 'PlayerTower');
-        tile.innerHTML = '🪖';
-      }
+      tile.onclick = () => {
+        tileClick(x, y);
+      };
       if (gameMap[x][y].enemyPath) {
         tile.setAttribute('isEnemyPath', 'EnemyPath');
         tile.innerHTML = '👾';
@@ -70,6 +70,10 @@ function render() {
         tile.setAttribute('isEnemySpawn', 'EnemySpawn');
         tile.innerHTML = '🛸';
       }
+      if (gameMap[x][y].isPlayerTower) {
+        tile.setAttribute('isPlayerTower', 'PlayerTower');
+        tile.innerHTML = '🪖';
+      }
       gameField?.appendChild(tile);
     }
   }
@@ -77,11 +81,13 @@ function render() {
 
 function generatePlayerStart() {
   gameMap[0][Math.floor(gameSize / 2)].playerBase = true;
+  gameMap[0][Math.floor(gameSize / 2)].isEmpty = false;
 }
 
 function generateEnemyStart() {
   gameMap[gameSize - 1][Math.floor(gameSize / 2)].enemyStart = true;
   gameMap[gameSize - 1][Math.floor(gameSize / 2)].enemyPath = true;
+  gameMap[gameSize - 1][Math.floor(gameSize / 2)].isEmpty = false;
 }
 //-----------------------
 function generateEnemyPath() {
@@ -99,6 +105,7 @@ function generateEnemyPath() {
             if (countPathConnected(pathX - 1, pathY) < 2) {
               pathX = pathX - 1;
               gameMap[pathX][pathY].enemyPath = true;
+              gameMap[pathX][pathY].isEmpty = false;
             }
           }
         }
@@ -109,6 +116,7 @@ function generateEnemyPath() {
             if (countPathConnected(pathX, pathY + 1) < 2) {
               pathY = pathY + 1;
               gameMap[pathX][pathY].enemyPath = true;
+              gameMap[pathX][pathY].isEmpty = false;
             }
           }
         }
@@ -119,6 +127,7 @@ function generateEnemyPath() {
             if (countPathConnected(pathX, pathY - 1) < 2) {
               pathY = pathY - 1;
               gameMap[pathX][pathY].enemyPath = true;
+              gameMap[pathX][pathY].isEmpty = false;
             }
           }
         }
@@ -129,6 +138,7 @@ function generateEnemyPath() {
       if (pathY < Math.floor(gameSize / 2)) {
         if (gameMap[pathY + 1]) {
           if (!gameMap[pathX][pathY + 1].enemyPath) {
+            gameMap[pathX][pathY].isEmpty = false;
             pathY = pathY + 1;
             gameMap[pathX][pathY].enemyPath = true;
           }
@@ -137,6 +147,7 @@ function generateEnemyPath() {
       if (pathY > Math.floor(gameSize / 2)) {
         if (gameMap[pathY - 1]) {
           if (!gameMap[pathX][pathY - 1].enemyPath) {
+            gameMap[pathX][pathY].isEmpty = false;
             pathY = pathY - 1;
             gameMap[pathX][pathY].enemyPath = true;
           }
@@ -147,9 +158,10 @@ function generateEnemyPath() {
       if (gameMap[pathX - 1][pathY].playerBase) {
         pathX = pathX - 1;
         gameMap[pathX][pathY].enemyPath = true;
+        gameMap[pathX][pathY].isEmpty = false;
       }
     }
-
+    render();
     if (pathX === 0 && pathY === 5) {
       connected = true;
       console.log('connected');
@@ -174,4 +186,24 @@ function countPathConnected(y: number, x: number) {
   }
 
   return numberOfConnectedPaths;
+}
+
+function tileClick(xIndex: number, yIndex: number) {
+  console.log('click');
+  console.log(gameMap[xIndex][yIndex]);
+  if (gameMap[xIndex][yIndex].isEmpty) {
+    if (money > 14) {
+      gameMap[xIndex][yIndex].isEmpty = false;
+      gameMap[xIndex][yIndex].isPlayerTower = true;
+      money = money - 15;
+    }
+  } else if (!gameMap[xIndex][yIndex].isEmpty) {
+    if (gameMap[xIndex][yIndex].isPlayerTower) {
+      gameMap[xIndex][yIndex].isEmpty = true;
+      gameMap[xIndex][yIndex].isPlayerTower = false;
+
+      money = money + 5;
+    }
+  }
+  render();
 }
