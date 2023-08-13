@@ -7,11 +7,15 @@ type GameMap = {
   playerBase: boolean;
   enemyStart: boolean;
   enemyPathConnected: number;
+  isEnemy: boolean;
+  isForward: boolean;
 }[][];
 const gameMap: GameMap = [];
 const gameSize = 11;
 type gameSize = number;
 let money = 100;
+const enemyBaseX = gameSize - 1;
+const enemyBaseY = Math.floor(gameSize / 2);
 //----------------------------------------
 generateField();
 gamePlay();
@@ -29,6 +33,8 @@ function generateField() {
         playerBase: false,
         enemyStart: false,
         enemyPathConnected: 0,
+        isEnemy: false,
+        isForward: true,
       };
       rowY.push(tile);
     }
@@ -41,6 +47,7 @@ function gamePlay() {
   generatePlayerStart();
   generateEnemyStart();
   generateEnemyPath();
+  enemyMove();
   render();
 }
 
@@ -59,8 +66,11 @@ function render() {
       };
       if (gameMap[x][y].enemyPath) {
         tile.setAttribute('isEnemyPath', 'EnemyPath');
+        tile.innerHTML = '';
+      }
+      if (gameMap[x][y].isEnemy) {
+        tile.setAttribute('isEnemy', 'Enemy');
         tile.innerHTML = '👾';
-        console.log('enemy path created');
       }
       if (gameMap[x][y].playerBase) {
         tile.setAttribute('isPlayerBase', 'PlayerBase');
@@ -85,9 +95,9 @@ function generatePlayerStart() {
 }
 
 function generateEnemyStart() {
-  gameMap[gameSize - 1][Math.floor(gameSize / 2)].enemyStart = true;
-  gameMap[gameSize - 1][Math.floor(gameSize / 2)].enemyPath = true;
-  gameMap[gameSize - 1][Math.floor(gameSize / 2)].isEmpty = false;
+  gameMap[enemyBaseX][enemyBaseY].enemyStart = true;
+  gameMap[enemyBaseX][enemyBaseY].enemyPath = true;
+  gameMap[enemyBaseX][enemyBaseY].isEmpty = false;
 }
 //-----------------------
 function generateEnemyPath() {
@@ -170,7 +180,6 @@ function generateEnemyPath() {
 }
 //------------------------------
 function countPathConnected(y: number, x: number) {
-  console.log('count path check');
   let numberOfConnectedPaths = 0;
   if (gameMap[y + 1]?.[x]?.enemyPath) {
     numberOfConnectedPaths++;
@@ -189,8 +198,6 @@ function countPathConnected(y: number, x: number) {
 }
 
 function tileClick(xIndex: number, yIndex: number) {
-  console.log('click');
-  console.log(gameMap[xIndex][yIndex]);
   if (gameMap[xIndex][yIndex].isEmpty) {
     if (money > 14) {
       gameMap[xIndex][yIndex].isEmpty = false;
@@ -206,4 +213,44 @@ function tileClick(xIndex: number, yIndex: number) {
     }
   }
   render();
+}
+
+function enemyMove() {
+  let enemyX = enemyBaseX;
+  let enemyY = enemyBaseY;
+  gameMap[enemyX][enemyY].isEnemy = true;
+  for (let x = 0; x < 2; x++) {
+    if (gameMap[enemyX - 1][enemyY].enemyPath) {
+      if (gameMap[enemyX - 1][enemyY].isForward) {
+        gameMap[enemyX - 1][enemyY].isEnemy = true;
+        gameMap[enemyX][enemyY].isEnemy = false;
+        gameMap[enemyX][enemyY].isForward = false;
+        enemyX = enemyX - 1;
+        render();
+        console.log('enemy goes north');
+      }
+    }
+    if (gameMap[enemyY - 1]) {
+      if (gameMap[enemyX][enemyY - 1].enemyPath) {
+        if (gameMap[enemyX - 1][enemyY].isForward) {
+          gameMap[enemyX][enemyY - 1].isEnemy = true;
+          gameMap[enemyX][enemyY].isEnemy = false;
+          gameMap[enemyX][enemyY].isForward = false;
+          enemyY = enemyY - 1;
+          render();
+          console.log('enemy goes east');
+        }
+      }
+    } else if (gameMap[enemyY + 1]) {
+      if (gameMap[enemyX][enemyY + 1].enemyPath) {
+        if (gameMap[enemyX][enemyY + 1].isForward) {
+          gameMap[enemyX][enemyY + 1].isEnemy = true;
+          gameMap[enemyX][enemyY].isForward = false;
+          enemyY = enemyY + 1;
+          render();
+          console.log('enemy goes west');
+        }
+      }
+    }
+  }
 }
