@@ -219,7 +219,7 @@ function enemyMove() {
   let enemyX = enemyBaseX;
   let enemyY = enemyBaseY;
   gameMap[enemyX][enemyY].isEnemy = true;
-  for (let x = 0; x < 2; x++) {
+  for (let x = 0; x < gameSize; x++) {
     if (gameMap[enemyX - 1][enemyY].enemyPath) {
       if (gameMap[enemyX - 1][enemyY].isForward) {
         gameMap[enemyX - 1][enemyY].isEnemy = true;
@@ -229,9 +229,8 @@ function enemyMove() {
         render();
         console.log('enemy goes north');
       }
-    }
-    if (gameMap[enemyY - 1]) {
-      if (gameMap[enemyX][enemyY - 1].enemyPath) {
+    } else if (gameMap[enemyX][enemyY - 1].enemyPath) {
+      if (gameMap[enemyY - 1]) {
         if (gameMap[enemyX - 1][enemyY].isForward) {
           gameMap[enemyX][enemyY - 1].isEnemy = true;
           gameMap[enemyX][enemyY].isEnemy = false;
@@ -241,8 +240,8 @@ function enemyMove() {
           console.log('enemy goes east');
         }
       }
-    } else if (gameMap[enemyY + 1]) {
-      if (gameMap[enemyX][enemyY + 1].enemyPath) {
+    } else if (gameMap[enemyX][enemyY + 1].enemyPath) {
+      if (gameMap[enemyY + 1]) {
         if (gameMap[enemyX][enemyY + 1].isForward) {
           gameMap[enemyX][enemyY + 1].isEnemy = true;
           gameMap[enemyX][enemyY].isForward = false;
