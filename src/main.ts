@@ -54,6 +54,7 @@ function render() {
       const tile = document.createElement('div');
       tile.className = 'tile';
       if (gameMap[x][y].isPlayerTower) {
+        tile.setAttribute('isPlayerTower', 'PlayerTower');
         tile.innerHTML = '🪖';
       }
       if (gameMap[x][y].enemyPath) {
@@ -67,7 +68,7 @@ function render() {
       }
       if (gameMap[x][y].enemyStart) {
         tile.setAttribute('isEnemySpawn', 'EnemySpawn');
-        tile.innerHTML = '👾';
+        tile.innerHTML = '🛸';
       }
       gameField?.appendChild(tile);
     }

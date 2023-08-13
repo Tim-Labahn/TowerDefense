@@ -32,13 +32,15 @@ h1{
   background-color: #838383;
   font-size: 5vh;
   }
-  .tile[isPlayerBase]{
-    background-color: #00421e;
+  .tile[isEnemyPath] {
+    background-color: #200033;
   }
-
+  .tile[isPlayerBase]{
+    background-color: #53b1ff;
+  }
+  .tile[isPlayerTower]{
+    background-color: #05691e;
+  }
   .tile[isEnemySpawn]{
     background-color: #ff0000;
-  }
-  .tile [isEnemyPath] {
-    background-color: #200033;
   }
