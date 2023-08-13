@@ -86,39 +86,42 @@ function generateEnemyPath() {
   let pathX = gameSize - 1;
   let pathY = Math.floor(gameSize / 2);
   let connected = false;
-  while (!connected) {
+  // while (!connected) {
+  for (let y = 0; y < 30; y++) {
     gameMap[pathX][pathY].enemyPathConnected = countPathConnected(pathX, pathY);
     console.log(gameMap[pathX][pathY].enemyPathConnected);
     const direction = Math.floor(Math.random() * 3) + 1;
     //--------------------
-    if (!gameMap[pathX - 1]) {
-      //check if north is a place
-      connected = true;
-      console.log('error');
-    }
-    if (!gameMap[pathY - 1]) {
-      //check if west is a place
-      connected = true;
-      console.log('error');
-    }
-    if (!gameMap[pathY + 1]) {
-      //check if east is a place
-      connected = true;
-      console.log('error');
-    }
     //------------------------
     if (direction === 1) {
-      if (!gameMap[pathX - 1]) {
+      if (gameMap[pathX - 1]) {
         if (!gameMap[pathX - 1][pathY].enemyPath) {
           pathX = pathX - 1;
           gameMap[pathX][pathY].enemyPath = true;
         }
       }
     }
+    if (direction === 2) {
+      if (gameMap[pathY + 1]) {
+        if (!gameMap[pathX][pathY + 1].enemyPath) {
+          pathY = pathY + 1;
+          gameMap[pathX][pathY].enemyPath = true;
+        }
+      }
+    }
+    if (direction === 3) {
+      if (gameMap[pathY - 1]) {
+        if (!gameMap[pathX][pathY - 1].enemyPath) {
+          pathY = pathY - 1;
+          gameMap[pathX][pathY].enemyPath = true;
+        }
+      }
+    }
     //-----------------------
     if (pathX === 0 && pathY === 5) {
-      connected = true;
+      // connected = true;
       console.log('connected');
+      break;
     }
   }
 }
