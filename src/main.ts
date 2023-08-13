@@ -80,48 +80,67 @@ function generatePlayerStart() {
 
 function generateEnemyStart() {
   gameMap[gameSize - 1][Math.floor(gameSize / 2)].enemyStart = true;
+  gameMap[gameSize - 1][Math.floor(gameSize / 2)].enemyPath = true;
 }
 //-----------------------
 function generateEnemyPath() {
   let pathX = gameSize - 1;
   let pathY = Math.floor(gameSize / 2);
   let connected = false;
-  // while (!connected) {
-  for (let y = 0; y < 30; y++) {
-    gameMap[pathX][pathY].enemyPathConnected = countPathConnected(pathX, pathY);
-    console.log(gameMap[pathX][pathY].enemyPathConnected);
-    const direction = Math.floor(Math.random() * 3) + 1;
-    //--------------------
-    //------------------------
-    if (direction === 1) {
-      if (gameMap[pathX - 1]) {
-        if (!gameMap[pathX - 1][pathY].enemyPath) {
-          pathX = pathX - 1;
-          gameMap[pathX][pathY].enemyPath = true;
+  while (!connected) {
+    while (pathX > 0) {
+      gameMap[pathX][pathY].enemyPathConnected = countPathConnected(pathX, pathY);
+      console.log(gameMap[pathX][pathY].enemyPathConnected);
+      const direction = Math.floor(Math.random() * 3) + 1;
+      //--------------------
+      //------------------------
+      if (direction === 1) {
+        if (gameMap[pathX - 1]) {
+          if (!gameMap[pathX - 1][pathY].enemyPath) {
+            pathX = pathX - 1;
+            gameMap[pathX][pathY].enemyPath = true;
+          }
+        }
+      }
+      if (direction === 2) {
+        if (gameMap[pathY + 1]) {
+          if (!gameMap[pathX][pathY + 1].enemyPath) {
+            pathY = pathY + 1;
+            gameMap[pathX][pathY].enemyPath = true;
+          }
+        }
+      }
+      if (direction === 3) {
+        if (gameMap[pathY - 1]) {
+          if (!gameMap[pathX][pathY - 1].enemyPath) {
+            pathY = pathY - 1;
+            gameMap[pathX][pathY].enemyPath = true;
+          }
+        }
+      }
+      //-----------------------
+    }
+    while (pathY != Math.floor(gameSize / 2)) {
+      if (pathY < Math.floor(gameSize / 2)) {
+        if (gameMap[pathY + 1]) {
+          if (!gameMap[pathX][pathY + 1].enemyPath) {
+            pathY = pathY + 1;
+            gameMap[pathX][pathY].enemyPath = true;
+          }
+        }
+      }
+      if (pathY > Math.floor(gameSize / 2)) {
+        if (gameMap[pathY - 1]) {
+          if (!gameMap[pathX][pathY - 1].enemyPath) {
+            pathY = pathY - 1;
+            gameMap[pathX][pathY].enemyPath = true;
+          }
         }
       }
     }
-    if (direction === 2) {
-      if (gameMap[pathY + 1]) {
-        if (!gameMap[pathX][pathY + 1].enemyPath) {
-          pathY = pathY + 1;
-          gameMap[pathX][pathY].enemyPath = true;
-        }
-      }
-    }
-    if (direction === 3) {
-      if (gameMap[pathY - 1]) {
-        if (!gameMap[pathX][pathY - 1].enemyPath) {
-          pathY = pathY - 1;
-          gameMap[pathX][pathY].enemyPath = true;
-        }
-      }
-    }
-    //-----------------------
     if (pathX === 0 && pathY === 5) {
-      // connected = true;
+      connected = true;
       console.log('connected');
-      break;
     }
   }
 }
