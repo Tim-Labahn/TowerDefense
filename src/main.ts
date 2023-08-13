@@ -88,7 +88,7 @@ function generateEnemyPath() {
   let pathY = Math.floor(gameSize / 2);
   let connected = false;
   while (!connected) {
-    while (pathX > 0) {
+    while (pathX > 1) {
       const direction = Math.floor(Math.random() * 3) + 1;
       //--------------------
       //------------------------
@@ -124,7 +124,7 @@ function generateEnemyPath() {
       }
       //-----------------------
     }
-    while (pathY != Math.floor(gameSize / 2)) {
+    while (pathY !== Math.floor(gameSize / 2)) {
       if (pathY < Math.floor(gameSize / 2)) {
         if (gameMap[pathY + 1]) {
           if (!gameMap[pathX][pathY + 1].enemyPath) {
@@ -142,6 +142,13 @@ function generateEnemyPath() {
         }
       }
     }
+    if (pathY === Math.floor(gameSize / 2)) {
+      if (gameMap[pathX - 1][pathY].playerBase) {
+        pathX = pathX - 1;
+        gameMap[pathX][pathY].enemyPath = true;
+      }
+    }
+
     if (pathX === 0 && pathY === 5) {
       connected = true;
       console.log('connected');
